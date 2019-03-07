@@ -35,6 +35,12 @@ public class Cheese {
 
     public Cheese() { }
 
+    public Cheese(String name, String description, Category category) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+    }
+
     public int getId() {
         return id;
     }
