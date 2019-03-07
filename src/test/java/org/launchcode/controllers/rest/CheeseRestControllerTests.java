@@ -36,6 +36,8 @@ public class CheeseRestControllerTests {
     private CategoryDao categoryDao;
 
     private List<Cheese> testCheeses = new ArrayList<>();
+    Category classic;
+    Category notClassic;
 
     @Before
     /**
@@ -46,10 +48,11 @@ public class CheeseRestControllerTests {
      *  data pollution from test to test.
      */
     public void before() {
-        Category classic = categoryDao.save(new Category("classic"));
+        this.classic = categoryDao.save(new Category("classic"));
+        this.notClassic = categoryDao.save(new Category("Not Classic"));
         this.testCheeses.add(cheeseDao.save(new Cheese("Mild Cheddar", "orange", classic)));
         this.testCheeses.add(cheeseDao.save(new Cheese("Cheddar", "orange", classic)));
-        this.testCheeses.add(cheeseDao.save(new Cheese("Sharp Cheddar", "orange", classic)));
+        this.testCheeses.add(cheeseDao.save(new Cheese("Velveta", "orange", notClassic)));
     }
 
     @Test
@@ -75,5 +78,14 @@ public class CheeseRestControllerTests {
                 .andExpect(jsonPath("$.description", is(cheese.getDescription())))
                 .andExpect(jsonPath("$.category.id", is(cheese.getCategory().getId())))
                 .andExpect(jsonPath("$.category.name", is(cheese.getCategory().getName())));
+    }
+
+    @Test
+    public void getAllCheesesByCategory() throws Exception {
+        mockMvc.perform(get("/api/cheeses/category/"+ classic.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].category.id", is(this.classic.getId())))
+                .andExpect(jsonPath("$[0].category.name", is(this.classic.getName())));
     }
 }
