@@ -12,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -35,9 +34,10 @@ public class CheeseRestControllerTests {
     @Autowired
     private CategoryDao categoryDao;
 
+    private MediaType jsonContentType = new MediaType(MediaType.APPLICATION_JSON, Charset.forName("utf8"));
     private List<Cheese> testCheeses = new ArrayList<>();
-    Category classic;
-    Category notClassic;
+    private Category classic;
+    private Category notClassic;
 
     @Before
     /**
@@ -60,7 +60,7 @@ public class CheeseRestControllerTests {
         Cheese firstCheeseByName = testCheeses.get(1);
         mockMvc.perform(get("/api/cheeses"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(new MediaType(MediaType.APPLICATION_JSON, Charset.forName("utf8"))))
+                .andExpect(content().contentType(jsonContentType))
                 .andExpect(jsonPath("$", hasSize(this.testCheeses.size())))
                 .andExpect(jsonPath("$[0].name", is(firstCheeseByName.getName())))
                 .andExpect(jsonPath("$[0].id", is(firstCheeseByName.getId())))
@@ -72,7 +72,7 @@ public class CheeseRestControllerTests {
         Cheese cheese = testCheeses.get(0);
         mockMvc.perform(get("/api/cheeses/" + cheese.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(new MediaType(MediaType.APPLICATION_JSON, Charset.forName("utf8"))))
+                .andExpect(content().contentType(jsonContentType))
                 .andExpect(jsonPath("$.name", is(cheese.getName())))
                 .andExpect(jsonPath("$.id", is(cheese.getId())))
                 .andExpect(jsonPath("$.description", is(cheese.getDescription())))
@@ -88,4 +88,31 @@ public class CheeseRestControllerTests {
                 .andExpect(jsonPath("$[0].category.id", is(this.classic.getId())))
                 .andExpect(jsonPath("$[0].category.name", is(this.classic.getName())));
     }
+
+    @Test
+    public void postNewCheese() throws Exception {
+        String cheeseJson = "{\"name\":\"Laser Cheddar\",\"description\":\"Laser hot chehdah\",\"categoryId\":"+this.notClassic.getId()+"}";
+        System.out.println(cheeseJson);
+        mockMvc.perform(post("/api/cheeses/").content(cheeseJson).contentType(jsonContentType))
+                .andExpect(content().contentType(jsonContentType))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", not(empty())))
+                .andExpect(jsonPath("$.name", is("Laser Cheddar")))
+                .andExpect(jsonPath("$.description", is("Laser hot chehdah")))
+                .andExpect(jsonPath("$.category.id", is(this.notClassic.getId())));
+    }
+
+    @Test
+    public void updateCheese() throws Exception {
+        String cheeseJson = "{id: \"\". \"name\":\"Laser Cheddar\",\"description\":\"Laser hot chehdah\",\"categoryId\":"+this.notClassic.getId()+"}";
+        System.out.println(cheeseJson);
+        mockMvc.perform(post("/api/cheeses/").content(cheeseJson).contentType(jsonContentType))
+                .andExpect(content().contentType(jsonContentType))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", not(empty())))
+                .andExpect(jsonPath("$.name", is("Laser Cheddar")))
+                .andExpect(jsonPath("$.description", is("Laser hot chehdah")))
+                .andExpect(jsonPath("$.category.id", is(this.notClassic.getId())));
+    }
+
 }

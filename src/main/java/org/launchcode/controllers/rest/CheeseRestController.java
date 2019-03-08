@@ -1,13 +1,14 @@
 package org.launchcode.controllers.rest;
 
+import org.launchcode.models.Category;
 import org.launchcode.models.Cheese;
+import org.launchcode.models.CheeseDTO;
 import org.launchcode.models.data.CategoryDao;
 import org.launchcode.models.data.CheeseDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
 
 
 @RestController
@@ -33,5 +34,14 @@ public class CheeseRestController {
     @GetMapping("/category/{id}")
     public Iterable<Cheese> getAllCheesesByCategory(@PathVariable int id) {
         return cheeseDao.findByCategory(categoryDao.findOne(id));
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Cheese postNewCheese(@RequestBody CheeseDTO cheeseDTO) {
+        Cheese cheese = new Cheese(cheeseDTO);
+        Category category = categoryDao.findOne(cheeseDTO.getCategoryId());
+        cheese.setCategory(category);
+        return cheeseDao.save(cheese);
     }
 }

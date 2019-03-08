@@ -28,12 +28,17 @@ public class Cheese {
     @ManyToOne
     private Category category;
 
+    public Cheese() { }
+
+    public Cheese(CheeseDTO dto) {
+        this(dto.getName(), dto.getDescription());
+        this.id = dto.getId();
+    }
+
     public Cheese(String name, String description) {
         this.name = name;
         this.description = description;
     }
-
-    public Cheese() { }
 
     public Cheese(String name, String description, Category category) {
         this.name = name;
