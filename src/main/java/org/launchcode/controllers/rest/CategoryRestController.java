@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-
+// TODO: be specific about which origins to allow
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/api/categories")
 public class CategoryRestController {
