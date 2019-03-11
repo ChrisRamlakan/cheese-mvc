@@ -103,16 +103,10 @@ public class CheeseRestControllerTests {
     }
 
     @Test
-    public void updateCheese() throws Exception {
-        String cheeseJson = "{id: \"\". \"name\":\"Laser Cheddar\",\"description\":\"Laser hot chehdah\",\"categoryId\":"+this.notClassic.getId()+"}";
-        System.out.println(cheeseJson);
-        mockMvc.perform(post("/api/cheeses/").content(cheeseJson).contentType(jsonContentType))
-                .andExpect(content().contentType(jsonContentType))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", not(empty())))
-                .andExpect(jsonPath("$.name", is("Laser Cheddar")))
-                .andExpect(jsonPath("$.description", is("Laser hot chehdah")))
-                .andExpect(jsonPath("$.category.id", is(this.notClassic.getId())));
+    public void deleteCheese() throws Exception {
+        Cheese cheese = testCheeses.get(0);
+        mockMvc.perform(delete("/api/cheeses/" + cheese.getId()))
+                .andExpect(status().isOk());
     }
 
 }

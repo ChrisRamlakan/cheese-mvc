@@ -8,7 +8,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Created by LaunchCode
+ * Created by LaunchCode.
+ * This is only used as an object that Spring will bind the json request to.
  */
 public class CheeseDTO {
 

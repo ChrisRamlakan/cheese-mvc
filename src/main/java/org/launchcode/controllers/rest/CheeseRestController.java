@@ -44,4 +44,10 @@ public class CheeseRestController {
         cheese.setCategory(category);
         return cheeseDao.save(cheese);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteCheeseById(@PathVariable int id) {
+        cheeseDao.delete(id);
+    }
+
 }
