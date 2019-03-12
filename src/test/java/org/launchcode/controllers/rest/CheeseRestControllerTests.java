@@ -39,7 +39,6 @@ public class CheeseRestControllerTests {
     private Category classic;
     private Category notClassic;
 
-    @Before
     /**
      *  Put KNOWN data in the test database.
      *  Also keep a list of the objects that should be in the database and use those to test results.
@@ -47,6 +46,7 @@ public class CheeseRestControllerTests {
      *  This will run before EACH TEST, so that each test has clean, known data to use. This prevents
      *  data pollution from test to test.
      */
+    @Before
     public void before() {
         this.classic = categoryDao.save(new Category("classic"));
         this.notClassic = categoryDao.save(new Category("Not Classic"));
@@ -92,7 +92,6 @@ public class CheeseRestControllerTests {
     @Test
     public void postNewCheese() throws Exception {
         String cheeseJson = "{\"name\":\"Laser Cheddar\",\"description\":\"Laser hot chehdah\",\"categoryId\":"+this.notClassic.getId()+"}";
-        System.out.println(cheeseJson);
         mockMvc.perform(post("/api/cheeses/").content(cheeseJson).contentType(jsonContentType))
                 .andExpect(content().contentType(jsonContentType))
                 .andExpect(status().isCreated())
@@ -100,6 +99,7 @@ public class CheeseRestControllerTests {
                 .andExpect(jsonPath("$.name", is("Laser Cheddar")))
                 .andExpect(jsonPath("$.description", is("Laser hot chehdah")))
                 .andExpect(jsonPath("$.category.id", is(this.notClassic.getId())));
+                // TODO: make sure category doesn't contain nested cheeses
     }
 
     @Test

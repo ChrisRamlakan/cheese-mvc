@@ -44,7 +44,6 @@ public class MenuRestControllerTests {
     private Menu cheapMenu;
     private Cheese velveta;
 
-    @Before
     /**
      *  Put KNOWN data in the test database.
      *  Also keep a list of the objects that should be in the database and use those to test results.
@@ -52,6 +51,7 @@ public class MenuRestControllerTests {
      *  This will run before EACH TEST, so that each test has clean, known data to use. This prevents
      *  data pollution from test to test.
      */
+    @Before
     public void before() {
         menuDao.save(new Menu("Fancy"));
         Category classic = categoryDao.save(new Category("classic"));
@@ -111,7 +111,7 @@ public class MenuRestControllerTests {
 
     @Test
     public void addCheeseToMenu() throws Exception {
-        String json = "{\"cheeseId\":\"" + this.velveta.getId() + "\"}";
+        String json = "{\"cheeseId\":" + this.velveta.getId() + "}";
         System.out.println(json);
         mockMvc.perform(post("/api/menus/" + this.cheapMenu.getId() + "/cheeses").content(json).contentType(jsonContentType))
                 .andExpect(status().isCreated());

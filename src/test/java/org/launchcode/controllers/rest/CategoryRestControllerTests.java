@@ -36,7 +36,6 @@ public class CategoryRestControllerTests {
     private Category classic;
     private Category notClassic;
 
-    @Before
     /**
      *  Put KNOWN data in the test database.
      *  Also keep a list of the objects that should be in the database and use those to test results.
@@ -44,6 +43,7 @@ public class CategoryRestControllerTests {
      *  This will run before EACH TEST, so that each test has clean, known data to use. This prevents
      *  data pollution from test to test.
      */
+    @Before
     public void before() {
         this.classic = categoryDao.save(new Category("Classic"));
         this.notClassic = categoryDao.save(new Category("Not Classic"));
@@ -57,6 +57,7 @@ public class CategoryRestControllerTests {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is(this.classic.getName())))
                 .andExpect(jsonPath("$[0].id", is(this.classic.getId())));
+                // TODO: make sure category doesn't contain nested cheeses
     }
 
     @Test
