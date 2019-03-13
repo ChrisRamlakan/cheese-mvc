@@ -91,7 +91,7 @@ public class CheeseRestControllerTests {
 
     @Test
     public void postNewCheese() throws Exception {
-        String cheeseJson = "{\"name\":\"Laser Cheddar\",\"description\":\"Laser hot chehdah\",\"categoryId\":"+this.notClassic.getId()+"}";
+        String cheeseJson = "{\"name\":\"Laser Cheddar\",\"description\":\"Laser hot chehdah\",\"categoryID\":"+this.notClassic.getId()+"}";
         mockMvc.perform(post("/api/cheeses/").content(cheeseJson).contentType(jsonContentType))
                 .andExpect(content().contentType(jsonContentType))
                 .andExpect(status().isCreated())

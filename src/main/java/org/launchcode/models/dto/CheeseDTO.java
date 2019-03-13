@@ -1,12 +1,5 @@
 package org.launchcode.models.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 /**
  * Created by LaunchCode.
  * This is only used as an object that Spring will bind the json request to.
@@ -16,7 +9,7 @@ public class CheeseDTO {
     private int id;
     private String name;
     private String description;
-    private int categoryId;
+    private int categoryID;
 
     public CheeseDTO() { }
 
@@ -40,11 +33,11 @@ public class CheeseDTO {
         this.description = description;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public int getCategoryID() {
+        return categoryID;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
     }
 }

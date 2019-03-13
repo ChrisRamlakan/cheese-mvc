@@ -53,7 +53,8 @@ public class MenuRestController {
         // json should only contain {cheeseId: 83}, but I could not figure out how to get spring to bind it
         // automatically, so using a library to get the value of the cheeseId attribute
         JSONObject object = new JSONObject(json);
-        int cheeseId = (int) object.get("cheeseId");
+        Object cheeseIdObject = object.get("cheeseID");
+        int cheeseId = cheeseIdObject instanceof String ? Integer.parseInt((String)cheeseIdObject) : (int) cheeseIdObject;
         Cheese cheese = cheeseDao.findOne(cheeseId);
         Menu menu = menuDao.findOne(menuId);
         menu.addItem(cheese);

@@ -111,7 +111,22 @@ public class MenuRestControllerTests {
 
     @Test
     public void addCheeseToMenu() throws Exception {
-        String json = "{\"cheeseId\":" + this.velveta.getId() + "}";
+        // Pass in a number value for the cheeseID
+        String json = "{\"cheeseID\":" + this.velveta.getId() + "}";
+        System.out.println(json);
+        mockMvc.perform(post("/api/menus/" + this.cheapMenu.getId() + "/cheeses").content(json).contentType(jsonContentType))
+                .andExpect(status().isCreated());
+        // cheapMenu should now have three cheeses
+        mockMvc.perform(get("/api/menus/"+ this.cheapMenu.getId() + "/cheeses"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].name", not(empty())));
+    }
+
+    @Test
+    public void addCheeseToMenuStringId() throws Exception {
+        // Pass in a string value for the cheeseID
+        String json = "{\"cheeseID\": \"" + this.velveta.getId() + "\"}";
         System.out.println(json);
         mockMvc.perform(post("/api/menus/" + this.cheapMenu.getId() + "/cheeses").content(json).contentType(jsonContentType))
                 .andExpect(status().isCreated());

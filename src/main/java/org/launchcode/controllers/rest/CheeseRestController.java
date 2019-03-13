@@ -42,7 +42,7 @@ public class CheeseRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public Cheese postNewCheese(@RequestBody CheeseDTO cheeseDTO) {
         Cheese cheese = new Cheese(cheeseDTO);
-        Category category = categoryDao.findOne(cheeseDTO.getCategoryId());
+        Category category = categoryDao.findOne(cheeseDTO.getCategoryID());
         cheese.setCategory(category);
         return cheeseDao.save(cheese);
     }
