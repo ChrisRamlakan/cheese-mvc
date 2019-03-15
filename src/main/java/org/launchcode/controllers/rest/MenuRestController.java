@@ -63,10 +63,11 @@ public class MenuRestController {
 
     @DeleteMapping("/menus/{menuId}/cheeses/{cheeseId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postNewCheese(@PathVariable int menuId, @PathVariable int cheeseId) {
+    public Cheese addCheeseToMenu(@PathVariable int menuId, @PathVariable int cheeseId) {
         Menu menu = menuDao.findOne(menuId);
         Cheese cheese = cheeseDao.findOne(cheeseId);
         menu.getCheeses().remove(cheese);
         menuDao.save(menu);
+        return cheese;
     }
 }
